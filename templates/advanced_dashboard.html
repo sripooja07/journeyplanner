@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Advanced Analytics Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>Advanced Analytics Dashboard</h1>
+
+    <p>Crowdedness-Aware Journey Planner</p>
+
+</header>
+
+<div class="advanced-container">
+
+    <h2>Overall Project Statistics</h2>
+
+    <div class="advanced-cards">
+
+        <div class="advanced-card">
+
+            <h3>Total Bus Routes</h3>
+
+            <h1>{{ total_routes }}</h1>
+
+        </div>
+
+        <div class="advanced-card">
+
+            <h3>Total Observations</h3>
+
+            <h1>{{ "{:,}".format(total_observations) }}</h1>
+
+        </div>
+
+        <div class="advanced-card">
+
+            <h3>Average Passenger Demand</h3>
+
+            <h1>{{ overall_average }}</h1>
+
+        </div>
+
+    </div>
+
+
+    <h2>Route Performance Summary</h2>
+
+    <div class="advanced-cards">
+
+        <div class="advanced-card busiest-card">
+
+            <h3>Busiest Bus Route</h3>
+
+            <h1>{{ busiest_route }}</h1>
+
+            <p>Average Demand: {{ busiest_demand }}</p>
+
+        </div>
+
+        <div class="advanced-card quietest-card">
+
+            <h3>Least Busy Bus Route</h3>
+
+            <h1>{{ least_busy_route }}</h1>
+
+            <p>Average Demand: {{ least_busy_demand }}</p>
+
+        </div>
+
+    </div>
+
+
+    <h2>Top 10 Busiest Bus Routes</h2>
+
+    <div class="advanced-chart">
+
+        <canvas id="routeChart"></canvas>
+
+    </div>
+
+
+    <h2>Hour-Wise Passenger Demand</h2>
+
+    <div class="advanced-chart">
+
+        <canvas id="hourChart"></canvas>
+
+    </div>
+
+
+    <h2>Crowdedness Distribution</h2>
+
+    <div class="advanced-chart small-chart">
+
+        <canvas id="crowdednessChart"></canvas>
+
+    </div>
+
+
+    <div class="advanced-navigation">
+
+        <a href="/" class="back-button">Home</a>
+
+        <a href="/history" class="back-button">
+            Prediction History
+        </a>
+
+        <a href="/route-analysis" class="back-button">
+            Route Analysis
+        </a>
+
+        <a href="/peak-hour-analysis" class="back-button">
+            Peak-Hour Analysis
+        </a>
+
+        <a href="/weekly-analysis" class="back-button">
+            Weekly Analysis
+        </a>
+
+        <a href="/smart-recommendation" class="back-button">
+            Smart Recommendation
+        </a>
+
+    </div>
+
+    <p class="dashboard-note">
+
+        Note: Passenger demand and crowdedness categories
+        are estimated from historical ticket data.
+        They do not represent verified physical bus occupancy.
+
+    </p>
+
+</div>
+
+<footer>
+
+    <p>Powered by XGBoost Machine Learning</p>
+
+</footer>
+
+
+<script>
+
+// ROUTE-WISE CHART
+
+new Chart(document.getElementById('routeChart'), {
+
+    type: 'bar',
+
+    data: {
+
+        labels: {{ route_labels | tojson }},
+
+        datasets: [{
+
+            label: 'Average Passenger Demand',
+
+            data: {{ route_values | tojson }},
+
+            backgroundColor: '#2563eb',
+
+            borderRadius: 6
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        indexAxis: 'y',
+
+        plugins: {
+
+            legend: {
+                position: 'bottom'
+            }
+
+        },
+
+        scales: {
+
+            x: {
+                beginAtZero: true
+            }
+
+        }
+
+    }
+
+});
+
+
+// HOUR-WISE CHART
+
+new Chart(document.getElementById('hourChart'), {
+
+    type: 'line',
+
+    data: {
+
+        labels: {{ hour_labels | tojson }},
+
+        datasets: [{
+
+            label: 'Average Passenger Demand',
+
+            data: {{ hour_values | tojson }},
+
+            borderColor: '#7c3aed',
+
+            backgroundColor: 'rgba(124, 58, 237, 0.15)',
+
+            fill: true,
+
+            tension: 0.4,
+
+            pointRadius: 4
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+                position: 'bottom'
+            }
+
+        },
+
+        scales: {
+
+            y: {
+                beginAtZero: true
+            }
+
+        }
+
+    }
+
+});
+
+
+// CROWDEDNESS DISTRIBUTION
+
+new Chart(document.getElementById('crowdednessChart'), {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: ['Low', 'Medium', 'High'],
+
+        datasets: [{
+
+            data: [
+
+                {{ low_count }},
+
+                {{ medium_count }},
+
+                {{ high_count }}
+
+            ],
+
+            backgroundColor: [
+
+                '#16a34a',
+
+                '#f59e0b',
+
+                '#dc2626'
+
+            ],
+
+            borderWidth: 2
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+                position: 'bottom'
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>

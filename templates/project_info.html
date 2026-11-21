@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Project Information - Crowdedness Aware Journey Planner</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #263445;
+            line-height: 1.7;
+        }
+
+        header {
+            background: #123b63;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+        }
+
+        h2 {
+            color: #123b63;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        ul {
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background: #eaf3ff;
+            padding: 15px;
+            border-left: 5px solid #123b63;
+            border-radius: 5px;
+            margin-top: 12px;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .tech-card {
+            background: #f1f5f9;
+            padding: 18px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #123b63;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .result-card {
+            background: #eaf3ff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .result-card h3 {
+            color: #123b63;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .result-card p {
+            font-size: 14px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #123b63;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 7px;
+            margin-top: 10px;
+        }
+
+        .back-button:hover {
+            background: #1d5689;
+        }
+
+        footer {
+            background: #123b63;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        @media(max-width: 600px) {
+            header h1 {
+                font-size: 23px;
+            }
+
+            .container {
+                padding: 12px;
+            }
+
+            .section {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Crowdedness-Aware Journey Planner</h1>
+    <p>Project Information and Technical Overview</p>
+</header>
+
+<div class="container">
+
+    <!-- PROJECT OVERVIEW -->
+
+    <div class="section">
+        <h2>1. Project Overview</h2>
+
+        <p>
+            The Crowdedness-Aware Journey Planner is a machine learning
+            based web application designed to estimate passenger demand
+            on different bus routes.
+        </p>
+
+        <p>
+            The system analyzes historical bus ticketing data and predicts
+            expected passenger demand based on route, date, time and
+            historical travel patterns.
+        </p>
+
+        <div class="highlight">
+            <strong>Main Idea:</strong>
+            Help passengers identify routes and travel times with
+            comparatively lower predicted passenger demand.
+        </div>
+    </div>
+
+
+    <!-- PROBLEM STATEMENT -->
+
+    <div class="section">
+        <h2>2. Problem Statement</h2>
+
+        <p>
+            Public transportation passengers may experience inconvenience
+            due to high passenger demand during certain routes and hours.
+            Choosing a suitable travel time can be difficult without
+            information about historical passenger patterns.
+        </p>
+
+        <p>
+            This project addresses the problem by developing a machine
+            learning system that estimates passenger demand and provides
+            route recommendations.
+        </p>
+    </div>
+
+
+    <!-- OBJECTIVES -->
+
+    <div class="section">
+        <h2>3. Project Objectives</h2>
+
+        <ul>
+            <li>Analyze historical bus ticketing data.</li>
+            <li>Identify passenger demand patterns across different routes.</li>
+            <li>Predict passenger demand using machine learning.</li>
+            <li>Classify predicted demand into Low, Medium and High categories.</li>
+            <li>Identify comparatively less busy routes.</li>
+            <li>Analyze peak hours and weekly passenger demand.</li>
+            <li>Provide an interactive web-based journey planning system.</li>
+        </ul>
+    </div>
+
+
+    <!-- DATASET -->
+
+    <div class="section">
+        <h2>4. Dataset Information</h2>
+
+        <p>
+            The project uses Delhi bus e-ticketing historical data
+            collected for October 2026.
+        </p>
+
+        <ul>
+            <li><strong>Data source:</strong> Delhi bus e-ticketing dataset.</li>
+            <li><strong>Time period:</strong> October 2026.</li>
+            <li><strong>Original records:</strong> Approximately 2.56 million.</li>
+            <li><strong>Target variable:</strong> Passenger count.</li>
+            <li><strong>Important features:</strong> Route, date, hour,
+                day of week and historical passenger demand.</li>
+        </ul>
+
+        <div class="highlight">
+            The dataset represents ticketing demand. It does not directly
+            measure the actual number of passengers physically present
+            inside each bus.
+        </div>
+    </div>
+
+
+    <!-- TECHNOLOGIES -->
+
+    <div class="section">
+        <h2>5. Technologies Used</h2>
+
+        <div class="tech-grid">
+
+            <div class="tech-card">Python</div>
+
+            <div class="tech-card">Flask</div>
+
+            <div class="tech-card">Pandas</div>
+
+            <div class="tech-card">NumPy</div>
+
+            <div class="tech-card">Scikit-learn</div>
+
+            <div class="tech-card">XGBoost</div>
+
+            <div class="tech-card">HTML</div>
+
+            <div class="tech-card">CSS</div>
+
+            <div class="tech-card">JavaScript</div>
+
+            <div class="tech-card">Chart.js</div>
+
+        </div>
+    </div>
+
+
+    <!-- MACHINE LEARNING -->
+
+    <div class="section">
+        <h2>6. Machine Learning Model</h2>
+
+        <p>
+            The project uses the XGBoost Regression algorithm to estimate
+            passenger demand.
+        </p>
+
+        <p><strong>Input Features:</strong></p>
+
+        <ul>
+            <li>Bus route</li>
+            <li>Hour of travel</li>
+            <li>Day of the week</li>
+            <li>Month</li>
+            <li>Weekend indicator</li>
+            <li>Previous day's passenger demand</li>
+            <li>Previous week's passenger demand</li>
+            <li>Seven-observation rolling mean</li>
+        </ul>
+
+        <p><strong>Output:</strong></p>
+
+        <ul>
+            <li>Predicted passenger demand.</li>
+            <li>Low, Medium or High demand category.</li>
+        </ul>
+
+        <div class="highlight">
+            The regression prediction is converted into demand categories
+            using thresholds calculated from the training data.
+        </div>
+    </div>
+
+
+    <!-- RESULTS -->
+
+    <div class="section">
+        <h2>7. Model Performance</h2>
+
+        <p>
+            The following results were obtained during model evaluation
+            on the test data.
+        </p>
+
+        <div class="result-grid">
+
+            <div class="result-card">
+                <h3>82.1%</h3>
+                <p>R² Score (0.821)</p>
+            </div>
+
+            <div class="result-card">
+                <h3>2.512</h3>
+                <p>Mean Absolute Error</p>
+            </div>
+
+            <div class="result-card">
+                <h3>4.271</h3>
+                <p>Root Mean Squared Error</p>
+            </div>
+
+            <div class="result-card">
+                <h3>59.26%</h3>
+                <p>Demand Classification Accuracy</p>
+            </div>
+
+        </div>
+
+        <p style="margin-top:15px;">
+            <strong>Note:</strong> R² is a regression metric and is not
+            classification accuracy. The classification accuracy is
+            59.26%.
+        </p>
+    </div>
+
+
+    <!-- APPLICATION FEATURES -->
+
+    <div class="section">
+        <h2>8. Main Application Features</h2>
+
+        <ul>
+            <li>Passenger demand prediction.</li>
+            <li>Prediction history tracking.</li>
+            <li>Route-wise demand analysis.</li>
+            <li>Peak-hour analysis.</li>
+            <li>Weekly and daily demand analysis.</li>
+            <li>Smart route recommendation.</li>
+            <li>Advanced analytics dashboard.</li>
+            <li>Project information page.</li>
+        </ul>
+    </div>
+
+
+    <!-- FUTURE SCOPE -->
+
+    <div class="section">
+        <h2>9. Future Enhancements</h2>
+
+        <ul>
+            <li>Integrate real-time GPS and bus location information.</li>
+            <li>Use live passenger counting systems.</li>
+            <li>Extend the dataset to cover multiple months and seasons.</li>
+            <li>Explore deep learning models such as LSTM and CNN.</li>
+            <li>Develop a mobile application for passengers.</li>
+            <li>Include traffic and weather information.</li>
+            <li>Improve prediction accuracy using additional features.</li>
+        </ul>
+    </div>
+
+
+    <!-- LIMITATIONS -->
+
+    <div class="section">
+        <h2>10. Project Limitations</h2>
+
+        <ul>
+            <li>Predictions depend on historical ticketing patterns.</li>
+            <li>Actual onboard occupancy is not directly measured.</li>
+            <li>Unexpected traffic, delays and special events may affect demand.</li>
+            <li>The dataset covers a limited historical period.</li>
+            <li>Predicted demand should be treated as an estimate, not a guarantee.</li>
+        </ul>
+    </div>
+
+
+    <!-- CONCLUSION -->
+
+    <div class="section">
+        <h2>11. Conclusion</h2>
+
+        <p>
+            The Crowdedness-Aware Journey Planner demonstrates how
+            machine learning can be applied to historical public
+            transportation ticketing data to estimate passenger demand.
+        </p>
+
+        <p>
+            By combining demand prediction, route analysis, peak-hour
+            analysis and smart recommendations, the system provides
+            useful information to support travel planning and
+            data-driven public transportation analysis.
+        </p>
+    </div>
+
+
+    <center>
+        <a href="/" class="back-button">Back to Home</a>
+    </center>
+
+</div>
+
+<footer>
+    <p>Crowdedness-Aware Journey Planner | Mini Project</p>
+    <p>Machine Learning Based Passenger Demand Prediction</p>
+</footer>
+
+</body>
+</html>

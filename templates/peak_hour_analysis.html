@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Peak-Hour Crowdedness Analysis</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<header>
+    <h1>Peak-Hour Crowdedness Analysis</h1>
+    <p>Identify Busy and Less Busy Travel Hours</p>
+</header>
+
+<div class="container history-container">
+
+    <h2>Hourly Passenger Demand Overview</h2>
+
+    <div class="stats-grid">
+
+        <div class="stat-card high-stat">
+
+            <h3>Busiest Travel Hour</h3>
+
+            <h1>{{ busiest_hour }}</h1>
+
+            <p>Average Demand: {{ busiest_demand }}</p>
+
+        </div>
+
+        <div class="stat-card low-stat">
+
+            <h3>Lowest-Demand Hour</h3>
+
+            <h1>{{ quietest_hour }}</h1>
+
+            <p>Average Demand: {{ quietest_demand }}</p>
+
+        </div>
+
+    </div>
+
+    <h2>Hourly Passenger Demand Chart</h2>
+
+    <div class="chart-container">
+
+        <canvas id="hourChart"></canvas>
+
+    </div>
+
+    <h2>Hourly Crowdedness Details</h2>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Hour</th>
+                    <th>Average Passengers</th>
+                    <th>Total Observations</th>
+                    <th>Low</th>
+                    <th>Medium</th>
+                    <th>High</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for record in hourly_records %}
+
+                <tr>
+
+                    <td>
+                        {{ "%02d:00"|format(record.hour|int) }}
+                    </td>
+
+                    <td>{{ record.average_passengers }}</td>
+
+                    <td>{{ record.total_observations }}</td>
+
+                    <td>{{ record.low_count }}</td>
+
+                    <td>{{ record.medium_count }}</td>
+
+                    <td>{{ record.high_count }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <h2>Travel Recommendations</h2>
+
+    <div class="recommendation-card">
+
+        <h3>Peak-Hour Recommendation</h3>
+
+        <p>
+            The highest average passenger demand occurs at
+            <strong>{{ busiest_hour }}</strong>.
+        </p>
+
+        <p>
+            Consider checking alternative hours if you want
+            to avoid higher passenger demand.
+        </p>
+
+    </div>
+
+    <div class="recommendation-card">
+
+        <h3>Low-Demand Recommendation</h3>
+
+        <p>
+            The lowest average passenger demand occurs at
+            <strong>{{ quietest_hour }}</strong>.
+        </p>
+
+        <p>
+            This may be a suitable time to consider travelling
+            based on the historical data.
+        </p>
+
+    </div>
+
+    <a href="/" class="back-button">
+        Back to Journey Planner
+    </a>
+
+    <a href="/history" class="back-button">
+        View Analytics Dashboard
+    </a>
+
+    <a href="/route-analysis" class="back-button">
+        View Route-Wise Analysis
+    </a>
+
+</div>
+
+<footer>
+    <p>Crowdedness-Aware Journey Planner</p>
+</footer>
+
+<script>
+
+const hourLabels = {{ hourly_records | map(attribute='hour') | list | tojson }};
+
+const passengerValues = {{ hourly_records | map(attribute='average_passengers') | list | tojson }};
+
+const ctx = document.getElementById('hourChart');
+
+new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: hourLabels.map(
+            hour => String(hour).padStart(2, '0') + ':00'
+        ),
+
+        datasets: [{
+
+            label: 'Average Passenger Demand',
+
+            data: passengerValues,
+
+            backgroundColor: '#2563eb',
+
+            borderRadius: 6
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+                position: 'bottom'
+            }
+
+        },
+
+        scales: {
+
+            y: {
+                beginAtZero: true,
+
+                title: {
+                    display: true,
+                    text: 'Average Passengers'
+                }
+            },
+
+            x: {
+                title: {
+                    display: true,
+                    text: 'Travel Hours'
+                }
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

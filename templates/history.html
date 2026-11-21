@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Analytics Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<header>
+    <h1>Prediction Analytics Dashboard</h1>
+    <p>Crowdedness-Aware Journey Planner</p>
+</header>
+
+<div class="container history-container">
+
+    <h2>Dashboard Overview</h2>
+
+    <!-- Statistics Cards -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card total">
+            <h3>Total Predictions</h3>
+            <h1>{{ total_predictions }}</h1>
+        </div>
+
+        <div class="stat-card low-stat">
+            <h3>Low Crowdedness</h3>
+            <h1>{{ low_count }}</h1>
+        </div>
+
+        <div class="stat-card medium-stat">
+            <h3>Medium Crowdedness</h3>
+            <h1>{{ medium_count }}</h1>
+        </div>
+
+        <div class="stat-card high-stat">
+            <h3>High Crowdedness</h3>
+            <h1>{{ high_count }}</h1>
+        </div>
+
+    </div>
+
+    <!-- Doughnut Chart -->
+
+    <h2>Crowdedness Distribution</h2>
+
+    <div class="chart-container">
+        <canvas id="crowdednessChart"></canvas>
+    </div>
+
+    <!-- Prediction History -->
+
+    <h2>Prediction History</h2>
+
+    {% if records %}
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Route</th>
+                    <th>Travel Date</th>
+                    <th>Time</th>
+                    <th>Passengers</th>
+                    <th>Crowdedness</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for record in records %}
+
+                <tr>
+
+                    <td>{{ record.route }}</td>
+
+                    <td>{{ record.travel_date }}</td>
+
+                    <td>{{ record.travel_hour }}</td>
+
+                    <td>{{ record.predicted_passengers }}</td>
+
+                    <td>
+                        <span class="status {{ record.crowdedness|lower }}">
+                            {{ record.crowdedness }}
+                        </span>
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <p class="empty-message">
+        No prediction history available yet.
+    </p>
+
+    {% endif %}
+
+    <a href="/" class="back-button">
+        Back to Journey Planner
+    </a>
+
+</div>
+
+<footer>
+    <p>Powered by XGBoost Machine Learning</p>
+</footer>
+
+<script>
+
+const lowCount = Number({{ low_count|tojson }});
+const mediumCount = Number({{ medium_count|tojson }});
+const highCount = Number({{ high_count|tojson }});
+
+const ctx = document.getElementById('crowdednessChart');
+
+new Chart(ctx, {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: ['Low', 'Medium', 'High'],
+
+        datasets: [{
+
+            data: [lowCount, mediumCount, highCount],
+
+            backgroundColor: [
+                '#10b981',
+                '#f59e0b',
+                '#ef4444'
+            ],
+
+            borderWidth: 2
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+                position: 'bottom'
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

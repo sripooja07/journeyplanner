@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Journey Prediction Results</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <h1>Bus Crowdedness Prediction</h1>
+    <p>Your Smart Journey Recommendation</p>
+</header>
+
+<div class="container">
+
+    <h2>Prediction Results</h2>
+
+    <p><b>Bus Route:</b> {{ route }}</p>
+
+    <p>
+        <b>Predicted Passenger Demand:</b>
+        {{ passengers }}
+    </p>
+
+    <div class="crowdedness-box {{ crowdedness|lower }}">
+        <h2>Estimated Crowdedness</h2>
+        <h1>{{ crowdedness }}</h1>
+    </div>
+
+    <hr>
+
+    <h2>Alternative Travel Recommendations</h2>
+
+    {% if alternatives %}
+
+        {% for option in alternatives %}
+
+            <div class="alternative-card
+                {% if loop.first %}best-recommendation{% endif %}">
+
+                <h3>{{ option.time }}</h3>
+
+                <p>
+                    <b>Predicted Passenger Demand:</b>
+                    {{ option.passengers }}
+                </p>
+
+                <div class="crowdedness-box {{ option.crowdedness|lower }}">
+                    {{ option.crowdedness }} Crowdedness
+                </div>
+
+                {% if loop.first %}
+                    <strong>Best Alternative Recommendation</strong>
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No lower-demand alternatives found.</p>
+
+    {% endif %}
+
+    <a href="/" class="back-button">
+        Plan Another Journey
+    </a>
+
+    <a href="/history" class="back-button">
+        View Analytics Dashboard
+    </a>
+
+    <a href="/route-analysis" class="back-button">
+        View Route-Wise Analysis
+    </a>
+
+</div>
+
+<footer>
+    <p>Powered by XGBoost Machine Learning and Flask</p>
+</footer>
+
+</body>
+</html>

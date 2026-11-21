@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Smart Journey Recommendation</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<header>
+    <h1>Smart Journey Recommendation</h1>
+    <p>Compare Bus Routes Using Machine Learning</p>
+</header>
+
+<div class="container history-container">
+
+    <h2>Find the Best Route</h2>
+
+    {% if error %}
+
+        <div class="error-message">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+    <form action="/smart-recommendation" method="POST">
+
+        <label>Select Travel Date</label>
+
+        <input type="date"
+               name="travel_date"
+               required>
+
+        <label>Select Travel Hour (0–23)</label>
+
+        <input type="number"
+               name="hour"
+               min="0"
+               max="23"
+               placeholder="Enter hour (e.g. 9)"
+               required>
+
+        <button type="submit">
+            Compare Bus Routes
+        </button>
+
+    </form>
+
+    {% if recommendations %}
+
+    <hr>
+
+    <h2>Journey Recommendation Results</h2>
+
+    <p>
+        <b>Travel Date:</b> {{ selected_date }}
+    </p>
+
+    <p>
+        <b>Travel Hour:</b>
+        {{ "%02d:00"|format(selected_hour) }}
+    </p>
+
+    <div class="best-route-card">
+
+        <h2>Best Route Based on Predicted Demand</h2>
+
+        <h1>Route {{ best_route.route }}</h1>
+
+        <h3>
+            {{ best_route.passengers }}
+            Predicted Passengers
+        </h3>
+
+        <span class="status {{ best_route.crowdedness|lower }}">
+            {{ best_route.crowdedness }} Crowdedness
+        </span>
+
+    </div>
+
+    <h2>Route Comparison Chart</h2>
+
+    <p>
+        Showing the 10 routes with the lowest predicted
+        passenger demand.
+    </p>
+
+    <div class="chart-container">
+
+        <canvas id="recommendationChart"></canvas>
+
+    </div>
+
+    <h2>All Route Recommendations</h2>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Rank</th>
+                    <th>Bus Route</th>
+                    <th>Predicted Passengers</th>
+                    <th>Crowdedness</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in recommendations %}
+
+                <tr>
+
+                    <td>{{ loop.index }}</td>
+
+                    <td>{{ item.route }}</td>
+
+                    <td>{{ item.passengers }}</td>
+
+                    <td>
+                        <span class="status {{ item.crowdedness|lower }}">
+                            {{ item.crowdedness }}
+                        </span>
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% endif %}
+
+    <a href="/" class="back-button">
+        Back to Journey Planner
+    </a>
+
+    <a href="/history" class="back-button">
+        View Analytics Dashboard
+    </a>
+
+</div>
+
+<footer>
+    <p>Crowdedness-Aware Journey Planner</p>
+</footer>
+
+{% if recommendations %}
+
+<script>
+
+const routeLabels = {{ chart_records | map(attribute='route') | list | tojson }};
+
+const passengerValues = {{ chart_records | map(attribute='passengers') | list | tojson }};
+
+new Chart(document.getElementById('recommendationChart'), {
+
+    type: 'bar',
+
+    data: {
+
+        labels: routeLabels,
+
+        datasets: [{
+
+            label: 'Predicted Passenger Demand',
+
+            data: passengerValues,
+
+            backgroundColor: '#2563eb',
+
+            borderRadius: 6
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        indexAxis: 'y',
+
+        plugins: {
+
+            legend: {
+                position: 'bottom'
+            }
+
+        },
+
+        scales: {
+
+            x: {
+                beginAtZero: true,
+
+                title: {
+                    display: true,
+                    text: 'Predicted Passengers'
+                }
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+{% endif %}
+
+</body>
+</html>

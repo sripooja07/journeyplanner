@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Journey Planner</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #123b63, #2563eb);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #123b63;
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 5px rgba(37,99,235,0.25);
+        }
+
+        .password-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .password-wrapper input {
+            padding-right: 48px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 19px;
+            width: auto;
+            padding: 4px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #64748b;
+        }
+
+        .register-link a {
+            color: #2563eb;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="logo">🚌</div>
+
+        <h1>Welcome Back!</h1>
+
+        <p class="subtitle">
+            Login to your Crowdedness-Aware Journey Planner account.
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="message {% if category == 'success' %}success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+
+            <label for="email">Email Address</label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+            >
+
+            <label for="password">Password</label>
+
+            <div class="password-wrapper">
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="toggle-password"
+                    onclick="togglePassword('password', this)"
+                    aria-label="Show password"
+                >👁</button>
+
+            </div>
+
+            <button type="submit" class="login-btn">
+                Login
+            </button>
+
+        </form>
+
+        <div class="register-link">
+
+            <p style="margin-bottom: 15px;">
+                <a href="{{ url_for('forgot_password') }}">
+                    Forgot Password?
+                </a>
+            </p>
+            Don't have an account?
+            <a href="{{ url_for('register') }}">Register Now</a>
+
+        </div>
+
+        <div class="footer">
+            Smart Mobility Through Intelligent Predictive Analytics
+        </div>
+
+    </div>
+
+    <script>
+        function togglePassword(inputId, button) {
+            const password = document.getElementById(inputId);
+
+            if (password.type === "password") {
+                password.type = "text";
+                button.textContent = "🙈";
+                button.setAttribute("aria-label", "Hide password");
+            } else {
+                password.type = "password";
+                button.textContent = "👁";
+                button.setAttribute("aria-label", "Show password");
+            }
+        }
+    </script>
+
+</body>
+</html>

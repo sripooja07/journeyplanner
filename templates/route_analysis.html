@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Route-Wise Crowdedness Analysis</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<header>
+    <h1>Route-Wise Crowdedness Analysis</h1>
+    <p>Compare Passenger Demand Across Bus Routes</p>
+</header>
+
+<div class="container history-container">
+
+    <h2>Bus Route Performance</h2>
+
+    {% if route_records %}
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Bus Route</th>
+                    <th>Total Predictions</th>
+                    <th>Average Passengers</th>
+                    <th>Low</th>
+                    <th>Medium</th>
+                    <th>High</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for route in route_records %}
+
+                <tr>
+                    <td>{{ route.route }}</td>
+                    <td>{{ route.total_predictions }}</td>
+                    <td>{{ route.average_passengers }}</td>
+                    <td>{{ route.low_count }}</td>
+                    <td>{{ route.medium_count }}</td>
+                    <td>{{ route.high_count }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <h2>Average Passenger Demand by Route</h2>
+
+    <div class="chart-container">
+        <canvas id="routeChart"></canvas>
+    </div>
+
+    <h2>Top Busiest Predicted Routes</h2>
+
+    <div class="route-list">
+
+        {% for route in route_records[:5] %}
+
+        <div class="route-card">
+
+            <h3>Route {{ route.route }}</h3>
+
+            <p>
+                Average Predicted Passengers:
+                <strong>{{ route.average_passengers }}</strong>
+            </p>
+
+            <p>
+                Total Predictions:
+                {{ route.total_predictions }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <p class="empty-message">
+        No route prediction data available yet.
+        Make some predictions to view route analysis.
+    </p>
+
+    {% endif %}
+
+    <a href="/" class="back-button">
+        Back to Journey Planner
+    </a>
+
+    <a href="/history" class="back-button">
+        View Analytics Dashboard
+    </a>
+
+</div>
+
+<footer>
+    <p>Crowdedness-Aware Journey Planner</p>
+</footer>
+
+{% if route_records %}
+
+<script>
+
+const routeLabels = {{ route_records | map(attribute='route') | list | tojson }};
+
+const passengerValues = {{ route_records | map(attribute='average_passengers') | list | tojson }};
+
+const ctx = document.getElementById('routeChart');
+
+new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: routeLabels,
+
+        datasets: [{
+
+            label: 'Average Predicted Passenger Demand',
+
+            data: passengerValues,
+
+            backgroundColor: '#2563eb',
+
+            borderRadius: 6
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        indexAxis: 'y',
+
+        plugins: {
+
+            legend: {
+                display: true
+            }
+
+        },
+
+        scales: {
+
+            x: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Average Predicted Passengers'
+                }
+            },
+
+            y: {
+                title: {
+                    display: true,
+                    text: 'Bus Routes'
+                }
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+{% endif %}
+
+</body>
+</html>
